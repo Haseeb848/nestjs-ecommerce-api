@@ -1,0 +1,63 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = "postgresql://postgres:admin@localhost:5432/shopping"
+}
+
+model Cart {
+  id         Int        @id @default(autoincrement())
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+  customer   Customer   @relation("customer", fields: [customerId], references: [id])
+  customerId Int
+  items      CartItem[]
+  totalPrice Float
+  products   Product[]  @relation("cart")
+  cartId     Int? // Add this field
+}
+
+model CartItem {
+  id        Int     @id @default(autoincrement())
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+  quantity  Int
+  cart      Cart    @relation(fields: [cartId], references: [id])
+  cartId    Int
+}
+
+model Product {
+  id        Int        @id @default(autoincrement())
+  name      String
+  price     Float
+  image     String?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @default(now())
+  carts     Cart[]     @relation("cart")
+  cartItems CartItem[]
+  createdByCustomerId Int
+  createdByRole       String
+  createdBy Customer @relation(fields: [createdByCustomerId], references: [id])
+ 
+}
+
+model Customer {
+  id                   Int      @id @default(autoincrement())
+  createAt             DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+  email                String   @unique
+  hash                 String
+  firstName            String
+  lastName             String
+  resetPasswordToken   String?
+  profileImage         String?
+  resetPasswordExpires String?
+  role                 String?   @default("customer") // add the role field with default value
+  carts                Cart[]   @relation("customer")
+  createdProducts Product[]
+}
