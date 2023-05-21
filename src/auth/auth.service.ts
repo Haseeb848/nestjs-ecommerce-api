@@ -43,10 +43,10 @@ export class AuthService {
 
   async signup(dto: AuthDto) {
     const { firstName, lastName, password, email, role } = dto;
-    const userinDto = await this.validateCustomer(email);
-    if (userinDto) {
-      throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
-    }
+    // const userinDto = await this.validateCustomer(email);
+    // if (userinDto) {
+    //   throw new HttpException('User already exists', HttpStatus.BAD_REQUEST);
+    // }
     const hash = await argon.hash(password);
     const createdCustomer = await this.prisma.customer.create({
       data: {
