@@ -61,12 +61,27 @@ export class CartController {
   //       parseInt(request.customerId, 10)
   //     );
   //   }
-
   @UseGuards(JwtAuthGuard)
   @Post('add-product-by-name')
   async addProductByNameToCart(
     // @User('userId') customerId: number,
-    @GetCustomer() customer: any,
+    @GetCustomer() customer: any, //decorator is used in it
+    @Body('productName') productName: string,
+    @Body('quantity') quantity: number,
+  ) {
+    console.log(`Customer ID: ${customer.userId}`);
+    return this.cartService.addProductByNameToCustomerCart(
+      customer.userId,
+      productName,
+      quantity,
+    );
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Patch('add-product-quantity-by-name')
+  async addQuantityByNameToCart(
+    // @User('userId') customerId: number,
+    @GetCustomer() customer: any, //decorator is used in it
     @Body('productName') productName: string,
     @Body('quantity') quantity: number,
   ) {
@@ -113,6 +128,10 @@ export class CartController {
     @Body('productId', ParseIntPipe) productId: number,
     @Body('quantity', ParseIntPipe) quantity: number,
   ) {
+    console.log(
+      this.removeItemFromCustomerCart,
+      `product remove by cust id ${productId}`,
+    );
     console.log(`Customer ID for quantity: ${customer.userId}`);
     return this.cartService.removeProductQuantityFromCustomerCart(
       customer.userId,
