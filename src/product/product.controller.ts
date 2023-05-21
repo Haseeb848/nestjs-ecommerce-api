@@ -23,48 +23,26 @@ import { Observable } from 'rxjs';
 import { Roles } from 'src/auth/guard/roles.decorator';
 import { JwtAuthGuard } from 'src/auth/guard/auth.guard';
 import { RolesGuard } from 'src/auth/guard/roles.guard';
-import { GetCustomer } from 'src/cart/decorator/get_customer.decorator';
+// import { GetCustomer } from 'src/cart/decorator/get_customer.decorator';
 import { GetUser } from './decorator/get_user.decorator';
-import { Customer, Product } from '@prisma/client';
-
-export const storage = {
-  storage: diskStorage({
-    destination: './uploads/profileimages',
-    filename: (req, file, cb) => {
-      const filename: string =
-        path.parse(file.originalname).name.replace(/\s/g, '') + uuidv4();
-      const extension: string = path.parse(file.originalname).ext;
-
-      cb(null, `${filename}${extension}`);
-    },
-  }),
-};
+import { v2 as cloudinary } from 'cloudinary';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { Multer } from 'multer';
 
 @Controller('product')
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
   @Roles('admin', 'admin5')
-  @UseInterceptors(FileInterceptor('file', storage))
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
+  @UseInterceptors(FileInterceptor('file'))
   async create(
     @Body({} as any) createProductDto: CreateProductDto,
     @UploadedFile() file: Express.Multer.File,
     @GetUser() user: any,
   ) {
-    console.log('i am image');
-    if (!file) {
-      return { message: 'No file provided' };
-    }
     console.log('user--------', user);
     console.log(createProductDto, '0---=--');
-    //    createProductDto.price = +createProductDto.price;
-
-    //    // Check if the price is a valid number
-    //    if (isNaN(createProductDto.price)) {
-    //      throw new BadRequestException('Price must be a valid number');
-    //    }
-
     const price = parseFloat(createProductDto.price);
 
     // Check if the price is a valid number
@@ -74,7 +52,7 @@ export class ProductController {
 
     return this.productService.createProduct(createProductDto, user, file);
   }
-
+  @UseGuards(JwtAuthGuard)
   @Get()
   async findAll() {
     return this.productService.findAll();
