@@ -7,7 +7,8 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://postgres:admin@localhost:5432/shopping"
+  url      = "postgresql://ud8nm5jgzhtfuznwujvn:1ERsSoXwUJNaE8eV49eG@bapiiva7nl372ypest92-postgresql.services.clever-cloud.com:6580/bapiiva7nl372ypest92"
+  // url      = "postgresql://postgres:admin@localhost:5432/shopping"
 }
 
 model Cart {
@@ -43,7 +44,7 @@ model Product {
   createdByCustomerId Int
   createdByRole       String
   createdBy Customer @relation(fields: [createdByCustomerId], references: [id])
- 
+
 }
 
 model Customer {
