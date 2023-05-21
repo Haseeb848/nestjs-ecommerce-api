@@ -9,6 +9,7 @@ import { MailModule } from './mail/mail.module';
 import { PrismaModule } from './prisma/prisma.module';
 import { CartModule } from './cart/cart.module';
 import { ProductModule } from './product/product.module';
+
 // import { RedisModule } from 'nestjs-redis';
 @Global()
 @Module({
@@ -16,12 +17,6 @@ import { ProductModule } from './product/product.module';
     ConfigModule.forRoot({
       isGlobal: true,
     }),
-    // RedisModule.forRootAsync({
-    //   useFactory: () => ({
-    //     url: 'redis://127.0.0.1:6379',
-    //   }),
-    // }),
-
     UserModule,
     AuthModule,
     MailModule,
