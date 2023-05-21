@@ -6,7 +6,7 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ConfigService } from '@nestjs/config';
-import { AuthService } from '../auth.service';
+// import { AuthService } from '../auth.service';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
@@ -27,6 +27,7 @@ export class JwtAuthGuard implements CanActivate {
       // Add customerId property to the request object
       request.customerId = payload.customerId;
       request.email = payload.email;
+      console.log('i am payload email', request.email)
       request.role = payload.role;
     //   request.createdByCustomerId= payload.createdByCustomerId
     //   request.createdByRole= payload.createdByRole
