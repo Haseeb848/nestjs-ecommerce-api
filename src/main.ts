@@ -9,6 +9,8 @@ async function bootstrap() {
   app.enableCors();
   // Serve static files from the "uploads" directory
   // app.use('/uploads', express.static('uploads'));
-  await app.listen(8080);
+  const host = '0.0.0.0';
+  const port = process.env.PORT || 3000;
+  await app.listen(port, host);
 }
 bootstrap();
